@@ -2,8 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class TicketEntity {
-
-  // Id not required - typeORM needs one to init schema
+  // Id not required for use-case - typeORM needs one to init schema
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,6 +18,4 @@ export class TicketEntity {
     default: () => 'NOW()',
   })
   received_at: Date;
-
-
 }

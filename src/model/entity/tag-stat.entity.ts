@@ -1,15 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
-
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Unique(['tag'])
 @Entity()
 export class TagStatEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: 'text', })
-    tag: string;
+  @Column({ type: 'text' })
+  tag: string;
 
-    @Column({ type: 'integer', })
-    count: number;
+  @Column({ type: 'integer' })
+  count: number;
 }

@@ -1,9 +1,4 @@
-import {
-  Body, Controller,
-  Get,
-  Param,
-  Post, Res
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { TicketsService } from '../business-logic/tickets.service';
 import { isTicketInputValObjOrThrow } from './ticket-input-validation.util';
@@ -21,19 +16,17 @@ export class TicketsController {
   }
 
   @Post()
-  async postHello(@Res() res: Response, @Body() ticketInput: any) {
+  async postTicket(@Res() res: Response, @Body() ticketInput: any) {
+    // Validate input
     try {
       isTicketInputValObjOrThrow(ticketInput);
     } catch (err: any) {
-      // Return 422
-      console.log(err.message);
-      res.status(422).send(err.message);
+      res.status(422).send({ error: err.message });
       return;
     }
 
-
     await this.ticketsService.processTicketCreation(ticketInput);
 
-    res.status(201).send('Ticket created');
+    res.status(201).send();
   }
 }
