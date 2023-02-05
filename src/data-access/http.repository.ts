@@ -7,11 +7,12 @@ import { TagStatValObj } from 'src/model/value-object/tag-stats.valobj';
 export class HttpRepository {
   readonly request: supertest.SuperTest<supertest.Test>;
   constructor() {
-    this.request = supertest('');    
+    this.request = supertest('');
   }
 
-  postTagStats(payload: TagStatValObj){
-    const recipientUrl = "https://webhook.site/9ed8db77-0008-49fc-b32c-d6fd85fc3a8f"
+  postTagStats(payload: TagStatValObj) {
+    const recipientUrl =
+      'https://webhook.site/9ed8db77-0008-49fc-b32c-d6fd85fc3a8f';
     return this.request.post(recipientUrl).send(payload);
   }
 }

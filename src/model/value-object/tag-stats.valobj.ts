@@ -1,4 +1,4 @@
 export interface TagStatValObj {
-    tag: string;
-    count: number;
+  tag: string;
+  count: number;
 }

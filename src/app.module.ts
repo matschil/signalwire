@@ -18,9 +18,7 @@ const PG_CONFIG: TypeOrmModuleOptions = {
 };
 
 @Module({
-  imports: [TypeOrmModule.forRoot(PG_CONFIG), ApiModule],  
+  imports: [TypeOrmModule.forRoot(PG_CONFIG), ApiModule],
   providers: [],
 })
-
 export class AppModule {}
-

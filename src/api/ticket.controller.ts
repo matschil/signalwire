@@ -6,7 +6,10 @@ import { isTicketInputValObjOrThrow } from './ticket-input-validation.util';
 
 @Controller()
 export class TicketsController {
-  constructor(private readonly ticketsRepository: TicketsRepository,private readonly ticketsService: TicketsService) {}
+  constructor(
+    private readonly ticketsRepository: TicketsRepository,
+    private readonly ticketsService: TicketsService,
+  ) {}
 
   @Post('ticket')
   async postTicket(@Res() res: Response, @Body() ticketInput: any) {
@@ -34,5 +37,4 @@ export class TicketsController {
     const tickets = await this.ticketsRepository.getTicketsByUserId(user_id);
     res.status(200).send(tickets);
   }
-
 }

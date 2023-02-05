@@ -24,7 +24,7 @@ export function isTicketInputValObjOrThrow(
   const validate = ajv.compile({
     properties: schema,
     required: ['user_id', 'title'],
-    type: "object",
+    type: 'object',
   });
 
   const isValid = validate(inputCandidate);
@@ -34,14 +34,16 @@ export function isTicketInputValObjOrThrow(
     const validationErrors = validate.errors || [];
     const firstValidationError = validationErrors[0];
 
-    if(firstValidationError){
+    if (firstValidationError) {
       throw new Error(
-        `Invalid input: ${firstValidationError.instancePath + ": "+ firstValidationError.message}`,
+        `Invalid input: ${
+          firstValidationError.instancePath +
+          ': ' +
+          firstValidationError.message
+        }`,
       );
-    }else{
-      throw new Error(
-        `Invalid input: ${JSON.stringify(inputCandidate)}`,
-      );
-    } 
+    } else {
+      throw new Error(`Invalid input: ${JSON.stringify(inputCandidate)}`);
+    }
   }
 }

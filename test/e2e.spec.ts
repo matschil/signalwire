@@ -123,7 +123,7 @@ describe('POST /tickets', () => {
     }
   });
 
-  it.only('SPEC-3 Should persist ticket', async () => {
+  it('SPEC-3 Should persist ticket', async () => {
     const ticketRoute = '/ticket';
     const ticketsRoute = '/tickets';
 

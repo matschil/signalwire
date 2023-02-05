@@ -26,8 +26,8 @@ export class TagStatsRepository {
     const tagStat: { tag: string; count: number } | undefined =
       await this.connection
         .createQueryBuilder()
-        .select("*")
-        .from(TagStatEntity, "")
+        .select('*')
+        .from(TagStatEntity, '')
         .orderBy('count', 'DESC')
         .take(1)
         .getRawOne();
