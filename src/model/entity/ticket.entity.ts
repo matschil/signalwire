@@ -19,4 +19,6 @@ export class TicketEntity {
     default: () => 'NOW()',
   })
   received_at: Date;
+
+
 }
