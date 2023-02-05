@@ -8,7 +8,7 @@ export class TagsRepository {
 
   async upsertTagCounts(tags: string[]) {
     const formattedTags = tags.map((tag) => tag.toLowerCase());
-    
+
     // increase count of each tag by 1 or create new tag with count 1
     await this.connection
       .createQueryBuilder()
@@ -16,10 +16,10 @@ export class TagsRepository {
       .into(TagEntity)
       .values(formattedTags.map((tag) => ({ tag, count: 1 })))
       .onConflict(`("tag") DO UPDATE SET "count" = "count" + 1`)
-      .execute();   
+      .execute();
   }
 
-  async getTagWithHighestCount() {
+  async getTagWithHighestCount(): Promise<TagEntity | undefined> {
     return this.connection
       .createQueryBuilder()
       .select('*')

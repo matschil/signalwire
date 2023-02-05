@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { HttpRepository } from 'src/data-access/http.repository';
+import { TagsRepository } from 'src/data-access/tags.repository';
 import { TicketsRepository } from '../data-access/tickets.repository';
 import { TicketInput } from '../model/input/ticket-input';
 
@@ -7,6 +8,7 @@ import { TicketInput } from '../model/input/ticket-input';
 export class TicketsService {
   constructor(
     private readonly ticketsRepository: TicketsRepository,
+    private readonly tagsRepository: TagsRepository,
     private readonly httpRepository: HttpRepository
   ) {}
   
@@ -15,15 +17,16 @@ export class TicketsService {
     await this.ticketsRepository.createTicket(input);
 
     // Upsert tags 
-    // TODO
+    await this.tagsRepository.upsertTagCounts(input.tags);
 
     // Retrieve tag with highest count
-    // TODO
-    // send stats to external service
-    const statsStub = {
-      tag: 'tag',
-      count: 1,
+    const tagWithHighestCount = await this.tagsRepository.getTagWithHighestCount();
+
+    if(!tagWithHighestCount){
+      return;
     }
-    await this.httpRepository.postTagStats(statsStub);
+
+    // send stats to external service
+    await this.httpRepository.postTagStats(tagWithHighestCount);
   }
 }
