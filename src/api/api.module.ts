@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { BusinessLogicModule } from '../business-logic/business-logic.module';
-import { TicketsController } from './tickets.controller';
+import { TicketsController } from './ticket.controller';
 
 
 
