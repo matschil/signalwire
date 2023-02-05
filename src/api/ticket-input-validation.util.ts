@@ -9,14 +9,14 @@ export function isTicketInputValObjOrThrow(
   inputCandidate: any,
 ): asserts inputCandidate is any {
   const schema: { [k: string]: JSONSchema6Definition } = {
-    userId: { type: 'number' },
-    title: { type: 'string' },
-    tags: { type: 'array', items: { type: 'string' }, maxLength: 4 },
+    user_id: { type: 'number' },
+    title: { type: 'string', minLength: 1 },
+    tags: { type: 'array', items: { type: 'string' }, maxItems: 4 },
   };
 
   const validate = ajv.compile({
     properties: schema,
-    required: ['userId', 'title'],
+    required: ['user_id', 'title'],
   });
 
   const isValid = validate(inputCandidate);
@@ -25,7 +25,7 @@ export function isTicketInputValObjOrThrow(
     const firstValidationError = validationErrors[0];
     if(firstValidationError){
       throw new Error(
-        `Invalid input: ${firstValidationError.message}`,
+        `Invalid input: ${firstValidationError.instancePath + ": "+ firstValidationError.message}`,
       );
     }else{
       throw new Error(

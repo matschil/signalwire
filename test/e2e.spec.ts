@@ -8,50 +8,57 @@ describe('POST /tickets', () => {
   const ticketRoute = '/ticket';
   
   
-  it.only('[Input Validation] should return response code 422 for invalid inputs', async () => {
+  it('[Input Validation] should return response code 422 for invalid inputs', async () => {
     const invalidInputs = [
       // id is not a number
-      {
+       {
         user_id: '1234',
         title: 'My title',
         tags: ['tag1', 'tag2'],
-      },
+      }, 
       // title is not a string
-      /* {
+       {
         user_id: '1234',
         title: 1234,
         tags: ['tag1', 'tag2'],
       },
+      
       // user_id is null
-      {
+       {
         user_id: null,
         title: 1234,
         tags: ['tag1', 'tag2'],
-      },
+      },  
+      
       // user_id is undefined
       {
         user_id: undefined,
         title: 1234,
         tags: ['tag1', 'tag2'],
       },
+      
       // title is null
       {
         user_id: 1234,
         title: null,
         tags: ['tag1', 'tag2'],
       },
+      
       // title is undefined
+      
       {
         user_id: 1234,
         title: undefined,
         tags: ['tag1', 'tag2'],
       },
+      
       // title is empty string
       {
         user_id: 1234,
         title: '',
         tags: ['tag1', 'tag2'],
       },
+      
       // tags is not an array
       {
         user_id: 1234,
@@ -63,12 +70,17 @@ describe('POST /tickets', () => {
         user_id: 1234,
         title: 'My title',
         tags: ['tag1', 'tag2', 'tag3', 'tag4', 'tag5'],
-      }, */
+      }, 
     ];
 
     for (const invalidInput of invalidInputs) {
       const res = await request.post(`${serverBaseUrl}${ticketRoute}`).send(invalidInput);
-      expect(res.status).toBe(422);
+      
+      if(res.status !== 422){
+        fail(
+          `Expected response code 422 for invalid input: ${JSON.stringify(invalidInput)} but got ${res.status}`
+        )
+      }
     }
   });
 
