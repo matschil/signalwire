@@ -3,7 +3,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { TicketEntity } from './model/entity/ticket.entity';
 import { ApiModule } from './api/api.module';
-import { TagsEntity } from './model/entity/tags.entity';
+import { TagsEntity } from './model/entity/tag.entity';
 
 const PG_CONFIG: TypeOrmModuleOptions = {
   type: 'postgres',

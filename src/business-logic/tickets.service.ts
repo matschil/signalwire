@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { TicketInput } from '../model/input/ticket-input';
-import { TicketsRepository } from '../data-access/tickets.repository';
+import { Controller } from '@nestjs/common';
 import { HttpRepository } from 'src/data-access/http.repository';
+import { TicketsRepository } from '../data-access/tickets.repository';
+import { TicketInput } from '../model/input/ticket-input';
 
 @Controller()
 export class TicketsService {
