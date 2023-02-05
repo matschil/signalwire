@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, ConsoleLogger, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import Ajv from 'ajv';
+import { Request, Response } from 'express';
 import { JSONSchema6Definition } from 'json-schema';
+import { isTicketInputValObjOrThrow } from './ticket-input-validation.util';
 
-
-@Controller("ticket")
+@Controller('ticket')
 export class TicketsController {
   constructor() {}
 
@@ -13,7 +14,18 @@ export class TicketsController {
   }
 
   @Post()
-  async postHello(@Body() ticketInput: any): Promise<string> {
+  async postHello(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() ticketInput: any): Promise<string> {
+    try {
+      isTicketInputValObjOrThrow(ticketInput);
+    } catch (err: any) {
+
+      // Return 422 
+      console.log(err.message)
+      res.status(422).send(err.message); 
+    }
     return '';
   }
 }

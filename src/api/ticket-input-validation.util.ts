@@ -22,13 +22,15 @@ export function isTicketInputValObjOrThrow(
   const isValid = validate(inputCandidate);
   if (!isValid) {
     const validationErrors = validate.errors || [];
-    throw new Error(
-      JSON.stringify({
-        errorPrefix: 'validateTicketInputValObjs',
-        row: inputCandidate,
-        validationErrors,
-        errorText: ajv.errorsText(validationErrors),
-      }),
-    );
+    const firstValidationError = validationErrors[0];
+    if(firstValidationError){
+      throw new Error(
+        `Invalid input: ${firstValidationError.message}`,
+      );
+    }else{
+      throw new Error(
+        `Invalid input: ${JSON.stringify(inputCandidate)}`,
+      );
+    } 
   }
 }
