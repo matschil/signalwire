@@ -152,4 +152,89 @@ describe('POST /tickets', () => {
     expect(latestTicketOfUser.user_id).toBe(user_id);
     expect(latestTicketOfUser.title).toBe(title);
   });
+
+  it('SPEC-4 Should send http request containing current tag with highest count to external service', async () => {
+    const ticketRoute = '/ticket';
+
+    const user_id = 4321;
+    const title = 'My title';
+
+    // Preparation: Retrieve latest tag that was sent to external service
+    // https://docs.webhook.site/api/about.html#common-usages
+    let res = await request.get(
+      `https://webhook.site/token/9ed8db77-0008-49fc-b32c-d6fd85fc3a8f/requests?page=1&password=&query=&sorting=newest`,
+    );
+    const latestRequestBeforeTest = res.body.data[0];
+    const latestTagStatBeforeTest = JSON.parse(latestRequestBeforeTest.content);
+
+    const tag = latestTagStatBeforeTest.tag;
+
+    // Post 10 tickets with tag
+    for (let i = 0; i < 10; i++) {
+      await request.post(`${serverBaseUrl}${ticketRoute}`).send({
+        user_id,
+        title,
+        tags: [tag],
+      });
+    }
+
+    // Retrieve latest tag that was sent to external service
+    res = await request.get(
+      `https://webhook.site/token/9ed8db77-0008-49fc-b32c-d6fd85fc3a8f/requests?page=1&password=&query=&sorting=newest`,
+    );
+    const latestRequest = res.body.data[0];
+    const latestTagStat = JSON.parse(latestRequest.content);
+
+    expect(latestTagStat.tag).toBe(tag);
+    expect(latestTagStat.count).toBe(latestTagStatBeforeTest.count + 10);
+  });
+
+  it('SPEC-6 Should count tags with case insensitivity', async () => {
+    const ticketRoute = '/ticket';
+
+    const user_id = 4321;
+    const title = 'My title';
+
+    // Preparation: Retrieve latest tag that was sent to external service
+    let res = await request.get(
+      `https://webhook.site/token/9ed8db77-0008-49fc-b32c-d6fd85fc3a8f/requests?page=1&password=&query=&sorting=newest`,
+    );
+    const latestRequestBeforeTest = res.body.data[0];
+    const latestTagStatBeforeTest = JSON.parse(latestRequestBeforeTest.content);
+
+    const tag = latestTagStatBeforeTest.tag;
+    const uppercaseTag = tag.toUpperCase();
+
+    expect(tag).not.toEqual(uppercaseTag);
+
+    // Post 5 tickets with lowercase tag
+    for (let i = 0; i < 5; i++) {
+      await request.post(`${serverBaseUrl}${ticketRoute}`).send({
+        user_id,
+        title,
+        tags: [tag],
+      });
+    }
+
+    // Post 5 tickets with uppercase tag
+    for (let i = 0; i < 5; i++) {
+      await request.post(`${serverBaseUrl}${ticketRoute}`).send({
+        user_id,
+        title,
+        tags: [uppercaseTag],
+      });
+    }
+
+    // Retrieve latest tag that was sent to external service
+    res = await request.get(
+      `https://webhook.site/token/9ed8db77-0008-49fc-b32c-d6fd85fc3a8f/requests?page=1&password=&query=&sorting=newest`,
+    );
+    const latestRequestAfterTest = res.body.data[0];
+    const latestTagStatAfterTest = JSON.parse(latestRequestAfterTest.content);
+
+    expect(latestTagStatAfterTest.tag).toBe(tag);
+    expect(latestTagStatAfterTest.count).toBe(
+      latestTagStatBeforeTest.count + 10,
+    );
+  });
 });
