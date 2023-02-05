@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { TicketEntity } from './model/entity/ticket.entity';
 import { ApiModule } from './api/api.module';
@@ -20,7 +19,7 @@ const PG_CONFIG: TypeOrmModuleOptions = {
 
 @Module({
   imports: [TypeOrmModule.forRoot(PG_CONFIG), ApiModule],  
-  providers: [AppService],
+  providers: [],
 })
 
 export class AppModule {}
