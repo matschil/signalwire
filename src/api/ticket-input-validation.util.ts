@@ -1,5 +1,6 @@
 import Ajv from 'ajv';
 import { JSONSchema6Definition } from 'json-schema';
+import { TicketInput } from 'src/model/input/ticket-input';
 
 const ajv = new Ajv({
   allErrors: true,
@@ -7,7 +8,7 @@ const ajv = new Ajv({
 
 export function isTicketInputValObjOrThrow(
   inputCandidate: any,
-): asserts inputCandidate is any {
+): asserts inputCandidate is TicketInput {
   const schema: { [k: string]: JSONSchema6Definition } = {
     user_id: { type: 'number' },
     title: { type: 'string', minLength: 1 },
