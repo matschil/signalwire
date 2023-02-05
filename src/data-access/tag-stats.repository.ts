@@ -15,7 +15,7 @@ export class TagStatsRepository {
       .insert()
       .into(TagStatEntity)
       .values(formattedTags.map((tag) => ({ tag, count: 1 })))
-      .onConflict(`("tag") DO UPDATE SET "tag_stat_entity"."count" = "tag_stat_entity"."count" + 1`)
+      .onConflict(`("tag") DO UPDATE SET "count" = "tag_stat_entity"."count" + 1`)
       .execute();
   }
 

@@ -28,7 +28,9 @@ export class TicketsController {
       // Return 422
       console.log(err.message);
       res.status(422).send(err.message);
+      return;
     }
+
 
     await this.ticketsService.processTicketCreation(ticketInput);
 
