@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { TagStatEntity } from '../model/entity/tag-stat.entity';
 import { Connection } from 'typeorm';
+import { TagStatValObj } from 'src/model/value-object/tag-stats.valobj';
 
 @Controller()
 export class TagStatsRepository {
@@ -15,17 +16,22 @@ export class TagStatsRepository {
       .insert()
       .into(TagStatEntity)
       .values(formattedTags.map((tag) => ({ tag, count: 1 })))
-      .onConflict(`("tag") DO UPDATE SET "count" = "tag_stat_entity"."count" + 1`)
+      .onConflict(
+        `("tag") DO UPDATE SET "count" = "tag_stat_entity"."count" + 1`,
+      )
       .execute();
   }
 
-  async getTagWithHighestCount(): Promise<TagStatEntity | undefined> {
-    return this.connection
-      .createQueryBuilder()
-      .select('*')
-      .from(TagStatEntity, 'tag')
-      .orderBy('tag.count', 'DESC')
-      .limit(1)
-      .getOne();
+  async getTagWithHighestCount(): Promise<TagStatValObj | undefined> {
+    const tagStat: { tag: string; count: number } | undefined =
+      await this.connection
+        .createQueryBuilder()
+        .select("*")
+        .from(TagStatEntity, "")
+        .orderBy('count', 'DESC')
+        .take(1)
+        .getRawOne();
+
+    return tagStat;
   }
 }

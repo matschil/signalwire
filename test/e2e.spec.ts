@@ -1,64 +1,63 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import * as supertest from 'supertest';
 
 describe('POST /tickets', () => {
   const request = supertest('');
 
   const serverBaseUrl = 'http://localhost:3000';
-  const ticketRoute = '/ticket';
-  
-  
-  it('[Input Validation] should return response code 422 for invalid inputs', async () => {
+
+  it('SPEC-1 Should return response code 422 for invalid inputs', async () => {
+    const ticketRoute = '/ticket';
+
     const invalidInputs = [
       // id is not a number
-       {
+      {
         user_id: '1234',
         title: 'My title',
         tags: ['tag1', 'tag2'],
-      }, 
+      },
       // title is not a string
-       {
+      {
         user_id: '1234',
         title: 1234,
         tags: ['tag1', 'tag2'],
       },
-      
+
       // user_id is null
-       {
+      {
         user_id: null,
         title: 1234,
         tags: ['tag1', 'tag2'],
-      },  
-      
+      },
+
       // user_id is undefined
       {
         user_id: undefined,
         title: 1234,
         tags: ['tag1', 'tag2'],
       },
-      
+
       // title is null
       {
         user_id: 1234,
         title: null,
         tags: ['tag1', 'tag2'],
       },
-      
+
       // title is undefined
-      
+
       {
         user_id: 1234,
         title: undefined,
         tags: ['tag1', 'tag2'],
       },
-      
+
       // title is empty string
       {
         user_id: 1234,
         title: '',
         tags: ['tag1', 'tag2'],
       },
-      
+
       // tags is not an array
       {
         user_id: 1234,
@@ -70,21 +69,30 @@ describe('POST /tickets', () => {
         user_id: 1234,
         title: 'My title',
         tags: ['tag1', 'tag2', 'tag3', 'tag4', 'tag5'],
-      }, 
+      },
     ];
 
     for (const invalidInput of invalidInputs) {
-      const res = await request.post(`${serverBaseUrl}${ticketRoute}`).send(invalidInput);
-      
-      if(res.status !== 422){
+      const res = await request
+        .post(`${serverBaseUrl}${ticketRoute}`)
+        .send(invalidInput);
+
+      if (res.status !== 422) {
         fail(
-          `Expected response code 422 for invalid input: ${JSON.stringify(invalidInput)} but got ${res.status}`
-        )
+          `Expected response code 422 for invalid input: ${JSON.stringify(
+            invalidInput,
+          )} but got ${res.status}`,
+        );
       }
+
+      // Expect that error message is returned
+      expect(res.body?.error?.length).toBeGreaterThan(0);
     }
   });
 
-  it('[Input Validation] should return response code 200 for valid inputs', async () => {
+  it('SPEC-2 Should return response code 200 for valid inputs', async () => {
+    const ticketRoute = '/ticket';
+
     const validInputs = [
       {
         user_id: 1234,
@@ -94,7 +102,7 @@ describe('POST /tickets', () => {
       {
         user_id: 1234,
         title: 'My title',
-        tags: []
+        tags: [],
       },
       {
         user_id: 1234,
@@ -108,8 +116,40 @@ describe('POST /tickets', () => {
     ];
 
     for (const validInput of validInputs) {
-      const res = await request.post(`${serverBaseUrl}${ticketRoute}`).send(validInput);
+      const res = await request
+        .post(`${serverBaseUrl}${ticketRoute}`)
+        .send(validInput);
       expect(res.status).toBe(201);
     }
+  });
+
+  it('SPEC-3 Should persist ticket', async () => {
+    const ticketRoute = '/ticket';
+    const ticketsRoute = '/tickets';
+
+    const user_id = 4321;
+    const title = 'My title';
+    const tags = ['tag1', 'tag2'];
+
+    // Post ticket
+    const ticketInput = {
+      user_id,
+      title,
+      tags,
+    };
+
+    await request.post(`${serverBaseUrl}${ticketRoute}`).send(ticketInput);
+
+    // Get ticket
+    const res = await request.get(
+      `${serverBaseUrl}${ticketsRoute}/${ticketInput.user_id}`,
+    );
+
+    // Assert that ticket is persisted
+    const tickets = res.body;
+    const latestTicketOfUser = tickets[tickets.length - 1];
+
+    expect(latestTicketOfUser.user_id).toBe(user_id);
+    expect(latestTicketOfUser.title).toBe(title);
   });
 });
