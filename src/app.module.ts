@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { BaseEntity } from './model/entity/base.entity';
+import { ApiModule } from './api/api.module';
 
 const PG_CONFIG: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -18,8 +18,7 @@ const PG_CONFIG: TypeOrmModuleOptions = {
 };
 
 @Module({
-  imports: [TypeOrmModule.forRoot(PG_CONFIG)],  
-  controllers: [AppController],
+  imports: [TypeOrmModule.forRoot(PG_CONFIG), ApiModule],  
   providers: [AppService],
 })
 
