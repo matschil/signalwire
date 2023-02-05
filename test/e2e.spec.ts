@@ -85,7 +85,7 @@ describe('POST /tickets', () => {
   });
 
   it('[Input Validation] should return response code 200 for valid inputs', async () => {
-    const invalidInputs = [
+    const validInputs = [
       {
         user_id: 1234,
         title: 'My title',
@@ -107,9 +107,9 @@ describe('POST /tickets', () => {
       },
     ];
 
-    for (const invalidInput of invalidInputs) {
-      const res = await request.post(`${serverBaseUrl}${ticketRoute}`).send(invalidInput);
-      expect(res.status).toBe(422);
+    for (const validInput of validInputs) {
+      const res = await request.post(`${serverBaseUrl}${ticketRoute}`).send(validInput);
+      expect(res.status).toBe(201);
     }
   });
 });

@@ -19,7 +19,7 @@ export class TicketsController {
   @Post()
   async postHello(
     @Res() res: Response,
-    @Body() ticketInput: any): Promise<string> {
+    @Body() ticketInput: any) {
     try {
       isTicketInputValObjOrThrow(ticketInput);
     } catch (err: any) {
@@ -32,7 +32,7 @@ export class TicketsController {
     await this.ticketsService.processTicketCreation(
       ticketInput,
     )
-
-    return '';
+    
+    res.status(201).send('Ticket created');
   }
 }

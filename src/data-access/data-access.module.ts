@@ -6,5 +6,6 @@ import { HttpRepository } from './http.repository';
 @Module({
   imports: [],
   providers: [TagsRepository, HttpRepository, TicketsRepository],
+  exports: [TagsRepository, HttpRepository, TicketsRepository],
 })
 export class DataAccessModule {}

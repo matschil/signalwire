@@ -7,6 +7,7 @@ import { TicketsService } from './tickets.service';
 @Module({
   imports: [DataAccessModule],  
   providers: [TicketsService],
+  exports: [TicketsService],
 })
 
 export class BusinessLogicModule {}
