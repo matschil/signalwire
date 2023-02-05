@@ -17,8 +17,10 @@ export class TicketsService {
     await this.ticketsRepository.createTicket(input);
 
     // Upsert tags
-    await this.tagsRepository.upsertTagCounts(input.tags ?? []);
-
+    if(input.tags?.length){
+      await this.tagsRepository.upsertTagCounts(input.tags);
+    }
+    
     // Retrieve tag with highest count
     const tagWithHighestCount =
       await this.tagsRepository.getTagWithHighestCount();
@@ -27,7 +29,7 @@ export class TicketsService {
       return;
     }
 
-    // send stats to external service
+    // Send stats to external service
     await this.httpRepository.postTagStats(tagWithHighestCount);
   }
 }
