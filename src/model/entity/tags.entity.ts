@@ -2,10 +2,13 @@ import { PrimaryGeneratedColumn, Column, Entity } from "typeorm";
 
 
 @Entity()
-export class BaseEntity {
+export class TagsEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: 'text', })
-    name: string;
+    tag: string;
+
+    @Column({ type: 'integer', })
+    count: number;
 }

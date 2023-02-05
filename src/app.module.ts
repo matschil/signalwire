@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { BaseEntity } from './model/entity/base.entity';
+import { TicketEntity } from './model/entity/ticket.entity';
 import { ApiModule } from './api/api.module';
+import { TagsEntity } from './model/entity/tags.entity';
 
 const PG_CONFIG: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -11,7 +12,7 @@ const PG_CONFIG: TypeOrmModuleOptions = {
   username: 'postgres',
   password: 'postgres',
   database: 'postgres',
-  entities: [BaseEntity],
+  entities: [TicketEntity, TagsEntity],
   schema: 'public',
   synchronize: true,
   dropSchema: true,
