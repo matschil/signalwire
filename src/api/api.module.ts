@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
+import { BusinessLogicModule } from '../business-logic/business-logic.module';
 import { TicketsController } from './tickets.controller';
 
 
 
 @Module({
-  imports: [],  
+  imports: [BusinessLogicModule],  
   controllers: [TicketsController],
   providers: [],
 })
