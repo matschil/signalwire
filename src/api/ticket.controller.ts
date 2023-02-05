@@ -1,4 +1,4 @@
-import { Body, ConsoleLogger, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Body, ConsoleLogger, Controller, Get, Param, Post, Req, Res } from '@nestjs/common';
 import Ajv from 'ajv';
 import { Request, Response } from 'express';
 import { JSONSchema6Definition } from 'json-schema';
@@ -11,8 +11,11 @@ export class TicketsController {
     private readonly ticketsService: TicketsService,
   ) {}
 
-  @Get()
-  async getTicketsByUserId(): Promise<string> {
+  @Get(":user_id")
+  async getTicketsByUserId(
+    @Res() res: Response,
+    @Param("user_id")
+  ): Promise<string> {
     return '';
   }
 
