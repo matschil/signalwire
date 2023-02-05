@@ -14,8 +14,8 @@ export class TicketsController {
   @Get(":user_id")
   async getTicketsByUserId(
     @Res() res: Response,
-    @Param("user_id")
-  ): Promise<string> {
+    @Param("user_id") user_id: number) {
+   {
     return '';
   }
 
